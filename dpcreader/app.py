@@ -8,7 +8,7 @@ import threading
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 
-from . import __version__, session as S, simulator, store
+from . import __version__, certdialog, report, session as S, simulator, store
 
 DEMO = "Demo (simulated calibrator)"
 BAUDS = ("9600", "19200", "38400")
@@ -30,6 +30,7 @@ class App(tk.Tk):
         self.minsize(900, 520)
         self.store = store.Store(db_path)
         self.snap = None
+        self.snap_id = None
         self.q = queue.Queue()
         self.busy = False
         self._nodes = {}
@@ -47,8 +48,14 @@ class App(tk.Tk):
             pass
         menu = tk.Menu(self)
         m = tk.Menu(menu, tearoff=0)
-        m.add_command(label="Export readings to CSV...", command=self.export_csv)
+        m.add_command(label="Create calibration certificate (PDF)...", command=self.create_certificate)
+        m.add_separator()
+        m.add_command(label="Export calibration results to CSV...", command=self.export_csv)
+        m.add_command(label="Export all decoded values to CSV...", command=self.export_values_csv)
         m.add_command(label="Export everything to JSON...", command=self.export_json)
+        m.add_separator()
+        m.add_command(label="Delete selected saved reads...", command=self._delete_history)
+        m.add_command(label="Delete all saved reads...", command=self._delete_all_history)
         m.add_separator()
         m.add_command(label="Exit", command=self.destroy)
         menu.add_cascade(label="File", menu=m)
@@ -70,20 +77,30 @@ class App(tk.Tk):
         self.read_btn = ttk.Button(bar, text="Read calibrator", command=self.read)
         self.read_btn.pack(side="left", padx=14)
         ttk.Button(bar, text="Export CSV", command=self.export_csv).pack(side="right")
+        ttk.Button(bar, text="Create certificate", command=self.create_certificate).pack(side="right", padx=(0, 6))
 
         body = ttk.Panedwindow(self, orient="horizontal")
         body.pack(fill="both", expand=True, padx=10, pady=(0, 6))
 
         left = ttk.Frame(body)
         ttk.Label(left, text="Saved reads").pack(anchor="w")
-        self.hist = ttk.Treeview(left, columns=("when", "src"), show="headings", height=6, selectmode="browse")
+        self.hist = ttk.Treeview(left, columns=("when", "src"), show="headings", height=6, selectmode="extended")
         self.hist.heading("when", text="Date / time")
         self.hist.heading("src", text="Source")
         self.hist.column("when", width=130)
         self.hist.column("src", width=120)
         self.hist.pack(fill="x")
         self.hist.bind("<<TreeviewSelect>>", self._on_history)
-        ttk.Button(left, text="Delete selected read", command=self._delete_history).pack(anchor="w", pady=(4, 10))
+        self.hist.bind("<Delete>", lambda e: self._delete_history())
+        self.hist.bind("<Button-3>", self._history_menu)
+        self.hist_menu = tk.Menu(self, tearoff=0)
+        self.hist_menu.add_command(label="Delete", command=self._delete_history)
+        self.hist_menu.add_command(label="Delete all saved reads...", command=self._delete_all_history)
+        hb = ttk.Frame(left)
+        hb.pack(fill="x", pady=(4, 10))
+        ttk.Button(hb, text="Delete selected", command=self._delete_history).pack(side="left")
+        ttk.Button(hb, text="Delete all...", command=self._delete_all_history).pack(side="left", padx=(6, 0))
+        ttk.Label(hb, text="Ctrl/Shift-click to pick several", foreground="gray").pack(side="left", padx=(10, 0))
         ttk.Label(left, text="Calibrator memory").pack(anchor="w")
         self.tree = ttk.Treeview(left, show="tree", selectmode="browse")
         self.tree.pack(fill="both", expand=True)
@@ -124,8 +141,16 @@ class App(tk.Tk):
     def _refresh_ports(self):
         ports = S.list_ports()
         self.port["values"] = ports + [DEMO]
-        if self.port.get() not in self.port["values"]:
+        fluke = [p for p in ports if "Fluke calibrator" in p]
+        if fluke and "Fluke calibrator" not in self.port.get():
+            self.port.set(fluke[0])
+        elif self.port.get() not in self.port["values"]:
             self.port.set(ports[0] if ports else DEMO)
+        if hasattr(self, "status"):
+            self.status.config(text=f"Calibrator found on {fluke[0].split(' - ')[0]}." if fluke else
+                               "No calibrator found. Connect it with the USB cable and switch it on, then click "
+                               "Refresh. (Windows 10/11 sets up the USB port by itself; give it a few seconds the "
+                               "first time.)")
 
     def _refresh_history(self, select=None):
         self.hist.delete(*self.hist.get_children())
@@ -136,14 +161,47 @@ class App(tk.Tk):
 
     def _on_history(self, _=None):
         sel = self.hist.selection()
-        if sel and not self.busy:
-            self.show(self.store.load(int(sel[0])))
+        if len(sel) == 1 and not self.busy and sel[0] != str(self.snap_id):
+            self.show(S.redecode(self.store.load(int(sel[0]))), int(sel[0]))
+
+    def _history_menu(self, event):
+        row = self.hist.identify_row(event.y)
+        if row and row not in self.hist.selection():
+            self.hist.selection_set(row)
+        self.hist_menu.tk_popup(event.x_root, event.y_root)
 
     def _delete_history(self):
-        sel = self.hist.selection()
-        if sel and messagebox.askyesno("Delete read", "Delete this saved read from this computer?"):
-            self.store.delete(int(sel[0]))
-            self._refresh_history()
+        sel = [int(i) for i in self.hist.selection()]
+        if not sel:
+            messagebox.showinfo("Delete saved reads", "Select one or more saved reads first.")
+            return
+        what = "this saved read" if len(sel) == 1 else f"these {len(sel)} saved reads"
+        if messagebox.askyesno("Delete saved reads", f"Delete {what} from this computer?\n\n"
+                               "This cannot be undone. Anything you have already exported is not affected."):
+            self.delete_reads(sel)
+
+    def _delete_all_history(self):
+        ids = [int(i) for i in self.hist.get_children()]
+        if ids and messagebox.askyesno("Delete all saved reads",
+                                       f"Delete all {len(ids)} saved reads from this computer?\n\n"
+                                       "This cannot be undone. Anything you have already exported is not affected.",
+                                       icon="warning"):
+            self.delete_reads(ids)
+
+    def delete_reads(self, ids):
+        for uid in ids:
+            self.store.delete(uid)
+        if self.snap_id in ids:
+            self.clear_view()
+        self._refresh_history()
+        self.status.config(text=f"Deleted {len(ids)} saved read{'s' if len(ids) != 1 else ''}.")
+
+    def clear_view(self):
+        self.snap, self.snap_id, self._nodes = None, None, {}
+        self.tree.delete(*self.tree.get_children())
+        self._fill_table({"columns": [], "rows": []})
+        self._set_detail("")
+        self.header.config(text="Read a calibrator, or pick a saved read.")
 
     # ------------------------------------------------------------ reading
     def read(self):
@@ -185,8 +243,8 @@ class App(tk.Tk):
                     self.busy = False
                     self.read_btn.state(["!disabled"])
                     uid = self.store.save(msg[1])
+                    self.show(msg[1], uid)
                     self._refresh_history(select=uid)
-                    self.show(msg[1])
                     self.status.config(text="Read complete and saved.")
                 elif msg[0] == "error":
                     self.busy = False
@@ -201,8 +259,8 @@ class App(tk.Tk):
         self.after(80, self._pump)
 
     # ------------------------------------------------------------ display
-    def show(self, snap):
-        self.snap = snap
+    def show(self, snap, uid=None):
+        self.snap, self.snap_id = snap, uid
         self._nodes = {}
         self.tree.delete(*self.tree.get_children())
         first = None
@@ -232,7 +290,8 @@ class App(tk.Tk):
         if not node:
             return
         group = node[1]
-        self._fill_table(S.readings(self.snap, group))
+        rows = report.group_rows(self.snap, group)
+        self._fill_table({"columns": report.COLUMNS, "rows": [[r[c] for c in report.COLUMNS] for r in rows]})
         if node[0] == "atom":
             self._set_detail(self._atom_text(node[2]))
             self.tabs.select(1)
@@ -246,7 +305,8 @@ class App(tk.Tk):
         self.table["columns"] = cols
         for c in cols:
             self.table.heading(c, text=c)
-            self.table.column(c, width=90 if c in ("Result set", "Point") else 150, anchor="center", stretch=False)
+            self.table.column(c, width=60 if c in ("Point", "Error %") else 140 if "function" in c else 100,
+                              anchor="center", stretch=False)
         for r in t["rows"]:
             self.table.insert("", "end", values=r)
 
@@ -290,9 +350,29 @@ class App(tk.Tk):
         if not self._need_snap():
             return
         path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV", "*.csv")],
-                                            initialfile="calibrator-readings.csv")
+                                            initialfile="calibration-results.csv")
         if path:
             n = store.export_csv(self.snap, path)
+            self.status.config(text=f"Exported {n} test points to {path}")
+
+    def create_certificate(self):
+        if not self._need_snap():
+            return
+        if not certdialog.calibrations(self.snap):
+            messagebox.showinfo("Create certificate", "This read has no calibrations (As Found / As Left results).")
+            return
+        sel = self.tree.selection()
+        node = self._nodes.get(sel[0]) if sel else None
+        certdialog.CertificateDialog(self, self.snap, group=node[1] if node else None,
+                                     on_done=lambda p: self.status.config(text=f"Certificate saved to {p}"))
+
+    def export_values_csv(self):
+        if not self._need_snap():
+            return
+        path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV", "*.csv")],
+                                            initialfile="calibrator-values.csv")
+        if path:
+            n = store.export_values_csv(self.snap, path)
             self.status.config(text=f"Exported {n} readings to {path}")
 
     def export_json(self):
@@ -317,7 +397,8 @@ def selftest(shot=None) -> int:
         time.sleep(0.02)
     app.update()
     rows = [app.table.item(i, "values") for i in app.table.get_children()]
-    ok = (app.snap is not None and len(rows) == 10 and rows[0][2] == "4.021 mA"
+    measure = report.COLUMNS.index("Measure")
+    ok = (app.snap is not None and len(rows) == 10 and rows[0][measure] == "4.021 mA"
           and len(app.hist.get_children()) == 1 and "DEMO DATA" in app.header.cget("text"))
     if shot:
         try:
@@ -327,7 +408,24 @@ def selftest(shot=None) -> int:
             ImageGrab.grab(bbox=(x, y, x + app.winfo_width(), y + app.winfo_height())).save(shot)
         except Exception as e:
             print("screenshot skipped:", e)
-    print("SELFTEST", "PASS" if ok else "FAIL", "rows=%d" % len(rows), rows[:1])
+    try:                                   # certificate PDF from the demo read (checks the bundled PDF library)
+        from . import certificate
+        cal = report.calibration(app.snap, app.snap["lists"]["r"][0])
+        pdf = os.path.join(tempfile.mkdtemp(), "cert.pdf")
+        certificate.build_pdf(cal, certificate.default_fields(cal, app.snap["device"]), pdf)
+        cert_ok = os.path.getsize(pdf) > 3000
+    except Exception as e:
+        print("certificate failed:", type(e).__name__, e)
+        cert_ok = False
+    ok = ok and cert_ok
+    app.hist.selection_set(app.hist.get_children())
+    app.update()
+    app.delete_reads([int(i) for i in app.hist.selection()])
+    app.update()
+    deleted = (not app.hist.get_children() and app.snap is None and not app.store.list()
+               and not app.table.get_children() and not app.tree.get_children())
+    ok = ok and deleted
+    print("SELFTEST", "PASS" if ok else "FAIL", "rows=%d" % len(rows), "delete=%s" % deleted, "certificate=%s" % cert_ok, rows[:1])
     app.destroy()
     return 0 if ok else 1
 

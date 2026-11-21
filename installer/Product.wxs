@@ -1,7 +1,11 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
-  <Package Name="DPC Reader" Manufacturer="DPC Reader project" Version="0.1.0"
+  <Package Name="DPC Reader" Manufacturer="DPC Reader project" Version="0.3.1"
            UpgradeCode="6B0F2C5E-3B7B-4E0A-9C61-2F5B8D1E7A44" Scope="perUser" Compressed="yes">
     <MajorUpgrade DowngradeErrorMessage="A newer version of DPC Reader is already installed." />
+    <!-- Everything the app needs (Python, C++ runtime, libraries) is inside this installer;
+         the only requirement is 64-bit Windows 10 or 11 (VersionNT 603 = Windows 8.1 / 10+). -->
+    <Launch Condition="Installed OR (VersionNT64 AND VersionNT &gt;= 603)"
+            Message="DPC Reader needs 64-bit Windows 10 or Windows 11." />
     <MediaTemplate EmbedCab="yes" />
     <StandardDirectory Id="LocalAppDataFolder">
       <Directory Id="ProgramsDir" Name="Programs">

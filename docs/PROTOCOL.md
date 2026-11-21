@@ -389,3 +389,30 @@ one row per calibration event, with per-group and per-test-point detail rows
 holding input, output, limits and the as-found / as-left readings, plus tables
 for logged data series and upload sessions. That application and its database
 are outside the scope of this project.
+
+## 10. Confirmed on a real Fluke 754 (firmware 1.18)
+
+Read over USB on 21 Nov 2026. The 754 enumerates as a standard CDC "USB Serial
+Device" (`VID_0F7E&PID_9009`, Windows' own driver) and talks at 9600 baud.
+Everything below is [obs] against that device; the decoded results matched the
+calibrator's own Results screens.
+
+* **Directory year** is sent as the full year (`2026`), not year − 2000.
+* **States are diffs.** Each result state names a base state (atom address); a
+  calibration's first state is the base for the others. Apply the chain to get the
+  full state. Antiquarks (a bucket id with no compound value) delete a bucket.
+* **Shared-value quark.** Bucket id `0` with value `[[id, id, ...], [kind, fields...]]`
+  gives the same value to every listed bucket.
+* **Alias buckets** (kind 6, spec `VR@`): `[6, mode, target bucket id, (cached value)]`.
+  `mPrimary` → `mDamped` (11), `sPrimary` → `sUser` (37), `mUutFS`/`mUutZero` → 28/29,
+  `sUutFS`/`sUutZero` → 119/120.
+* **Range back-reference.** A value+range bucket whose range header is a single byte
+  (`[0], g, a, mark`) reuses a range stored earlier; the unit comes from that bucket
+  in the base state.
+* **STRATEGY_SUMMARY:** `status` 1 = As Found, 0 = As Left; `srcd` = source settle
+  delay in ms (10000 = 10 s, shown as *Delay*); `results` = atom indices of each test
+  point's state; `strategy` addresses the procedure-list STRATEGY atom (e.g. "3 ↑").
+* **Strategy names** are UTF-8 with private-use glyphs: U+E08C = ↑, U+E08D = ↓.
+* **Buckets used for a result** (map `sbucket/root`): `tol` (tolerance %), `error`
+  (error % of span, as displayed), `scMode`/`mcMode` (map `mode`), `sRtdType` (map
+  `rtd`), `sTcType` (map `tc`), units from map `unit` (5 = Amps, 13 = Celsius ...).

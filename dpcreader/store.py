@@ -7,7 +7,7 @@ import os
 import sqlite3
 from typing import List, Optional
 
-from . import session as S
+from . import report as R, session as S
 
 
 def data_dir() -> str:
@@ -46,7 +46,17 @@ class Store:
 
 
 def export_csv(snap: dict, path: str) -> int:
-    """All readings in the snapshot, one row per test point. Returns the row count."""
+    """Calibration results as the calibrator shows them, one row per test point. Returns the row count."""
+    rows = R.all_rows(snap)
+    with open(path, "w", newline="", encoding="utf-8-sig") as f:
+        wr = csv.DictWriter(f, fieldnames=R.COLUMNS)
+        wr.writeheader()
+        wr.writerows(rows)
+    return len(rows)
+
+
+def export_values_csv(snap: dict, path: str) -> int:
+    """Every decoded value of every test point (raw bucket names). Returns the row count."""
     tables = []
     for w, groups in snap["lists"].items():
         for g in groups:
@@ -58,6 +68,9 @@ def export_csv(snap: dict, path: str) -> int:
         for c in t["columns"]:
             if c not in cols:
                 cols.append(c)
+    if "Note" in cols:
+        cols.remove("Note")
+        cols.append("Note")
     n = 0
     with open(path, "w", newline="", encoding="utf-8-sig") as f:
         wr = csv.writer(f)

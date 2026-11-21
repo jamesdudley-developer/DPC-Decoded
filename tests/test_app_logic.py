@@ -34,6 +34,15 @@ class EndToEnd(unittest.TestCase):
         self.assertEqual(t["rows"][0], [1, 1, "4.021 mA", "mA DC", "0 psi"])
         self.assertEqual(t["rows"][9], [2, 5, "20.004 mA", "mA DC", "100 psi"])
 
+    def test_redecode_saved_read(self):
+        snap = json.loads(json.dumps(self.snap))        # as loaded back from the store
+        for g in snap["lists"]["r"]:
+            for a in g["atoms"]:
+                a["decoded"] = {"kind": "undecoded"}    # e.g. saved by an older decoder
+        session.redecode(snap)
+        self.assertEqual(session.readings(snap, snap["lists"]["r"][0]),
+                         session.readings(self.snap, self.snap["lists"]["r"][0]))
+
     def test_store_and_export(self):
         d = tempfile.mkdtemp()
         st = store.Store(os.path.join(d, "t.db"))
@@ -41,7 +50,13 @@ class EndToEnd(unittest.TestCase):
         self.assertEqual(st.list()[0][0], uid)
         self.assertEqual(st.load(uid), self.snap)
         n = store.export_csv(self.snap, os.path.join(d, "o.csv"))
-        rows = list(csv.reader(open(os.path.join(d, "o.csv"), encoding="utf-8-sig")))
+        with open(os.path.join(d, "o.csv"), encoding="utf-8-sig") as f:
+            rows = list(csv.DictReader(f))
+        self.assertEqual((n, len(rows)), (13, 13))
+        self.assertEqual((rows[0]["Tag"], rows[0]["Measure"], rows[0]["Source"]), ("PT-101", "4.021 mA", "0.000 psi"))
+        n = store.export_values_csv(self.snap, os.path.join(d, "v.csv"))
+        with open(os.path.join(d, "v.csv"), encoding="utf-8-sig") as f:
+            rows = list(csv.reader(f))
         self.assertEqual((n, len(rows)), (13, 14))
         self.assertEqual(rows[0][:4], ["Memory", "Task", "Tag", "Serial"])
         st.db.close()

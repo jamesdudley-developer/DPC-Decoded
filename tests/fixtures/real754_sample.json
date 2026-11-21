@@ -1,0 +1,2054 @@
+{
+"when": "2026-11-21T17:01:22",
+"source": "COM5",
+"device": {
+"model": "FLUKE 754",
+"info": [
+"1.18",
+"0000000"
+]
+},
+"maps": {
+"damping": [
+{
+"value": 0,
+"text": "On",
+"extra": null
+},
+{
+"value": 1,
+"text": "Off",
+"extra": null
+},
+{
+"value": 2,
+"text": "Compare",
+"extra": null
+}
+],
+"error": [
+{
+"value": 0,
+"text": "Off",
+"extra": null
+},
+{
+"value": 1,
+"text": "Normal",
+"extra": null
+},
+{
+"value": 2,
+"text": "UEV Measure",
+"extra": null
+},
+{
+"value": 3,
+"text": "UEV Source",
+"extra": null
+},
+{
+"value": 4,
+"text": "UEV Measure Source",
+"extra": null
+}
+],
+"font": [
+{
+"value": 0,
+"text": "helvb24",
+"extra": null
+},
+{
+"value": 1,
+"text": "vhelvr10",
+"extra": null
+},
+{
+"value": 2,
+"text": "helvr12",
+"extra": null
+},
+{
+"value": 3,
+"text": "helvr12i",
+"extra": null
+},
+{
+"value": 4,
+"text": "helvr32",
+"extra": null
+}
+],
+"hartjack": [
+{
+"value": 0,
+"text": "ext",
+"extra": null
+},
+{
+"value": 1,
+"text": "mA",
+"extra": null
+}
+],
+"language": [
+{
+"value": 0,
+"text": "English",
+"extra": "English"
+},
+{
+"value": 1,
+"text": "French",
+"extra": "Fran\u00c3\u00a7ais"
+},
+{
+"value": 2,
+"text": "German",
+"extra": "Deutsch"
+},
+{
+"value": 3,
+"text": "Italian",
+"extra": "Italiano"
+},
+{
+"value": 4,
+"text": "Spanish",
+"extra": "Espa\u00c3\u00b1ol"
+},
+{
+"value": 5,
+"text": "Portuguese",
+"extra": "Portugu\u00c3\u00aas"
+},
+{
+"value": 6,
+"text": "Simplified Chinese",
+"extra": "\u00e7\u00ae\u0080\u00e4\u00bd\u0093\u00e4\u00b8\u00ad\u00e6\u0096\u0087"
+},
+{
+"value": 7,
+"text": "Russian",
+"extra": "\u00d0\u00a0\u00d1\u0083\u00d1\u0081\u00d1\u0081\u00d0\u00ba\u00d0\u00b8\u00d0\u00b9"
+},
+{
+"value": 8,
+"text": "Korean",
+"extra": "\u00ed\u0095\u009c\u00ea\u00b5\u00ad\u00ec\u0096\u00b4"
+}
+],
+"loop": [
+{
+"value": 1,
+"text": "Disabled",
+"extra": null
+},
+{
+"value": 2,
+"text": "Enabled 24V",
+"extra": null
+},
+{
+"value": 3,
+"text": "Enabled 28V",
+"extra": null
+}
+],
+"minmax": [
+{
+"value": 0,
+"text": "On",
+"extra": null
+},
+{
+"value": 1,
+"text": "Off",
+"extra": null
+}
+],
+"mode": [
+{
+"value": 0,
+"text": "None",
+"extra": null
+},
+{
+"value": 1,
+"text": "Current",
+"extra": null
+},
+{
+"value": 2,
+"text": "DCV",
+"extra": null
+},
+{
+"value": 3,
+"text": "ACV",
+"extra": null
+},
+{
+"value": 4,
+"text": "Freq",
+"extra": null
+},
+{
+"value": 5,
+"text": "Freq Low",
+"extra": null
+},
+{
+"value": 6,
+"text": "Freq Square",
+"extra": null
+},
+{
+"value": 7,
+"text": "Freq Sine",
+"extra": null
+},
+{
+"value": 8,
+"text": "2 Wire Ohms",
+"extra": null
+},
+{
+"value": 9,
+"text": "3 Wire Ohms",
+"extra": null
+},
+{
+"value": 10,
+"text": "4 Wire Ohms",
+"extra": null
+},
+{
+"value": 11,
+"text": "Cont",
+"extra": null
+},
+{
+"value": 12,
+"text": "TC",
+"extra": null
+},
+{
+"value": 13,
+"text": "TC Linear",
+"extra": null
+},
+{
+"value": 14,
+"text": "2 Wire RTD",
+"extra": null
+},
+{
+"value": 15,
+"text": "3 Wire RTD",
+"extra": null
+},
+{
+"value": 16,
+"text": "4 Wire RTD",
+"extra": null
+},
+{
+"value": 17,
+"text": "Drywell",
+"extra": null
+},
+{
+"value": 18,
+"text": "Pressure",
+"extra": null
+},
+{
+"value": 19,
+"text": "Portdriver",
+"extra": null
+},
+{
+"value": 20,
+"text": "Current Sink",
+"extra": null
+},
+{
+"value": 21,
+"text": "HART",
+"extra": null
+},
+{
+"value": 23,
+"text": "Trip Cont",
+"extra": null
+},
+{
+"value": 24,
+"text": "Trip DCV",
+"extra": null
+},
+{
+"value": 25,
+"text": "Trip ACV",
+"extra": null
+},
+{
+"value": 26,
+"text": "DCV Loop",
+"extra": null
+},
+{
+"value": 27,
+"text": "Ref Junc",
+"extra": null
+},
+{
+"value": 28,
+"text": "Rtd Ohms",
+"extra": null
+},
+{
+"value": 29,
+"text": "Cont Ohms",
+"extra": null
+}
+],
+"mult": [
+{
+"value": 0,
+"text": "None",
+"extra": null
+},
+{
+"value": 1,
+"text": "Micro",
+"extra": null
+},
+{
+"value": 2,
+"text": "Milli",
+"extra": null
+},
+{
+"value": 3,
+"text": "Normal",
+"extra": null
+},
+{
+"value": 4,
+"text": "Kilo",
+"extra": null
+},
+{
+"value": 5,
+"text": "Mega",
+"extra": null
+},
+{
+"value": 6,
+"text": "Giga",
+"extra": null
+}
+],
+"ramp": [
+{
+"value": 0,
+"text": "None",
+"extra": null
+},
+{
+"value": 1,
+"text": "Stopped",
+"extra": null
+},
+{
+"value": 2,
+"text": "Halted",
+"extra": null
+},
+{
+"value": 3,
+"text": "Tripped",
+"extra": null
+},
+{
+"value": 4,
+"text": "Active",
+"extra": null
+}
+],
+"rtd": [
+{
+"value": 0,
+"text": "None",
+"extra": null
+},
+{
+"value": 1,
+"text": "Pt100 (3926)",
+"extra": null
+},
+{
+"value": 2,
+"text": "Pt100 (385)",
+"extra": null
+},
+{
+"value": 3,
+"text": "Ni120 (672)",
+"extra": null
+},
+{
+"value": 4,
+"text": "Pt200 (385)",
+"extra": null
+},
+{
+"value": 5,
+"text": "Pt500 (385)",
+"extra": null
+},
+{
+"value": 6,
+"text": "Pt1000 (385)",
+"extra": null
+},
+{
+"value": 7,
+"text": "Cu10 (427)",
+"extra": null
+},
+{
+"value": 8,
+"text": "Pt100 (3916)",
+"extra": null
+}
+],
+"sbucket": [
+{
+"value": 0,
+"text": "root",
+"extra": null
+},
+{
+"value": 1,
+"text": "rmp",
+"extra": null
+},
+{
+"value": 2,
+"text": "swt",
+"extra": null
+}
+],
+"sbucket/root": [
+{
+"value": 2,
+"text": "bExtTemp",
+"extra": "VR"
+},
+{
+"value": 3,
+"text": "bIntTemp",
+"extra": "VR"
+},
+{
+"value": 4,
+"text": "mbFS",
+"extra": "VR"
+},
+{
+"value": 5,
+"text": "mbMax",
+"extra": "VR"
+},
+{
+"value": 6,
+"text": "mbMin",
+"extra": "VR"
+},
+{
+"value": 7,
+"text": "muMax",
+"extra": "VR"
+},
+{
+"value": 8,
+"text": "muMin",
+"extra": "VR"
+},
+{
+"value": 9,
+"text": "mbZero",
+"extra": "VR"
+},
+{
+"value": 10,
+"text": "mbUEV",
+"extra": "VR"
+},
+{
+"value": 11,
+"text": "mDamped",
+"extra": "VR"
+},
+{
+"value": 12,
+"text": "mMapped",
+"extra": "VR"
+},
+{
+"value": 13,
+"text": "mPhysical",
+"extra": "VR"
+},
+{
+"value": 14,
+"text": "mPhysicalSec",
+"extra": "VR"
+},
+{
+"value": 15,
+"text": "mRawElect",
+"extra": "VR"
+},
+{
+"value": 16,
+"text": "mRawElectSec",
+"extra": "VR"
+},
+{
+"value": 17,
+"text": "sbFS",
+"extra": "VR"
+},
+{
+"value": 18,
+"text": "sbZero",
+"extra": "VR"
+},
+{
+"value": 19,
+"text": "sbLinearTcFS",
+"extra": "VR"
+},
+{
+"value": 20,
+"text": "sbLinearTcZero",
+"extra": "VR"
+},
+{
+"value": 21,
+"text": "sbUEV",
+"extra": "VR"
+},
+{
+"value": 22,
+"text": "sMapped",
+"extra": "VR"
+},
+{
+"value": 23,
+"text": "sPhysical",
+"extra": "VR"
+},
+{
+"value": 24,
+"text": "sPhysicalSec",
+"extra": "VR"
+},
+{
+"value": 25,
+"text": "sRawElect",
+"extra": "VR"
+},
+{
+"value": 26,
+"text": "sRawElectSec",
+"extra": "VR"
+},
+{
+"value": 27,
+"text": "sRawSimulate",
+"extra": "VR"
+},
+{
+"value": 28,
+"text": "mbUutFS",
+"extra": "VR"
+},
+{
+"value": 29,
+"text": "mbUutZero",
+"extra": "VR"
+},
+{
+"value": 30,
+"text": "sbUutFS",
+"extra": "VR"
+},
+{
+"value": 31,
+"text": "sbUutZero",
+"extra": "VR"
+},
+{
+"value": 32,
+"text": "sIncrement",
+"extra": "VR"
+},
+{
+"value": 33,
+"text": "sbIncrement",
+"extra": "VR"
+},
+{
+"value": 34,
+"text": "sbRangeMax",
+"extra": "VR,unr"
+},
+{
+"value": 35,
+"text": "sbRangeMin",
+"extra": "VR,unr"
+},
+{
+"value": 36,
+"text": "mUser",
+"extra": "VR"
+},
+{
+"value": 37,
+"text": "sUser",
+"extra": "VR"
+},
+{
+"value": 38,
+"text": "sUserSec",
+"extra": "VR"
+},
+{
+"value": 39,
+"text": "mSettled",
+"extra": "I,exp,ro"
+},
+{
+"value": 40,
+"text": "mPZeroed",
+"extra": "I,exp,ro"
+},
+{
+"value": 41,
+"text": "mPCalTime",
+"extra": "T,exp,ro"
+},
+{
+"value": 42,
+"text": "mPSerial",
+"extra": "ST[12],exp,ro"
+},
+{
+"value": 43,
+"text": "mPModel",
+"extra": "ST[16],exp,ro"
+},
+{
+"value": 44,
+"text": "sSettled",
+"extra": "I,exp,ro"
+},
+{
+"value": 45,
+"text": "sPZeroed",
+"extra": "I,exp,ro"
+},
+{
+"value": 46,
+"text": "sPCalTime",
+"extra": "T,exp,ro"
+},
+{
+"value": 47,
+"text": "sPSerial",
+"extra": "ST[12],exp,ro"
+},
+{
+"value": 48,
+"text": "sPModel",
+"extra": "ST[16],exp,ro"
+},
+{
+"value": 49,
+"text": "error",
+"extra": "VR,exp,ro"
+},
+{
+"value": 50,
+"text": "intTemp",
+"extra": "VR,exp,ro"
+},
+{
+"value": 53,
+"text": "suRangeMax",
+"extra": "VR,exp,ro,unr"
+},
+{
+"value": 54,
+"text": "suRangeMin",
+"extra": "VR,exp,ro,unr"
+},
+{
+"value": 55,
+"text": "defaultPres",
+"extra": "U,exp,su"
+},
+{
+"value": 56,
+"text": "defaultTemp",
+"extra": "U,exp,su"
+},
+{
+"value": 57,
+"text": "extTemp",
+"extra": "VR,exp,su"
+},
+{
+"value": 58,
+"text": "tempStd",
+"extra": "tempstd,exp,su"
+},
+{
+"value": 59,
+"text": "mCustomFS",
+"extra": "VR,exp,su"
+},
+{
+"value": 60,
+"text": "mCustomUnit",
+"extra": "U,exp,su"
+},
+{
+"value": 61,
+"text": "mCustomZero",
+"extra": "VR,exp,su"
+},
+{
+"value": 62,
+"text": "mFS",
+"extra": "VR,exp,su"
+},
+{
+"value": 63,
+"text": "mZero",
+"extra": "VR,exp,su"
+},
+{
+"value": 64,
+"text": "mUutFS",
+"extra": "VR@,exp,su"
+},
+{
+"value": 65,
+"text": "mUutZero",
+"extra": "VR@,exp,su"
+},
+{
+"value": 66,
+"text": "mTcType",
+"extra": "tc,exp,su"
+},
+{
+"value": 67,
+"text": "mRtdType",
+"extra": "rtd,exp,su"
+},
+{
+"value": 68,
+"text": "mUEV",
+"extra": "VR,exp,su"
+},
+{
+"value": 69,
+"text": "sTcType",
+"extra": "tc,exp,su"
+},
+{
+"value": 70,
+"text": "sRtdType",
+"extra": "rtd,exp,su"
+},
+{
+"value": 71,
+"text": "sUEV",
+"extra": "VR,exp,su"
+},
+{
+"value": 72,
+"text": "sLinearTcZero",
+"extra": "VR,exp,su"
+},
+{
+"value": 73,
+"text": "sRequest",
+"extra": "V,exp,su"
+},
+{
+"value": 74,
+"text": "sRequestSec",
+"extra": "V,exp,su"
+},
+{
+"value": 75,
+"text": "sCustomFS",
+"extra": "VR,exp,su"
+},
+{
+"value": 76,
+"text": "sCustomUnit",
+"extra": "U,exp,su"
+},
+{
+"value": 77,
+"text": "sCustomZero",
+"extra": "VR,exp,su"
+},
+{
+"value": 78,
+"text": "sFS",
+"extra": "VR,exp,su"
+},
+{
+"value": 79,
+"text": "sZero",
+"extra": "VR,exp,su"
+},
+{
+"value": 80,
+"text": "sUutFS",
+"extra": "VR@,exp,su"
+},
+{
+"value": 81,
+"text": "sUutZero",
+"extra": "VR@,exp,su"
+},
+{
+"value": 82,
+"text": "sLinearTcFS",
+"extra": "VR,exp,su"
+},
+{
+"value": 83,
+"text": "mcMode",
+"extra": "mode,exp,su"
+},
+{
+"value": 84,
+"text": "mcDamping",
+"extra": "damping,exp,su"
+},
+{
+"value": 85,
+"text": "mcScale",
+"extra": "scale,exp,su"
+},
+{
+"value": 86,
+"text": "mcMinmax",
+"extra": "minmax,exp,su"
+},
+{
+"value": 87,
+"text": "mcTref",
+"extra": "tref,exp,su"
+},
+{
+"value": 88,
+"text": "scMode",
+"extra": "mode,exp,su"
+},
+{
+"value": 89,
+"text": "scDamping",
+"extra": "damping,exp,su"
+},
+{
+"value": 90,
+"text": "scScale",
+"extra": "scale,exp,su"
+},
+{
+"value": 91,
+"text": "scTref",
+"extra": "tref,exp,su"
+},
+{
+"value": 92,
+"text": "mcRange",
+"extra": "VR,exp,su"
+},
+{
+"value": 93,
+"text": "mcRangeLocked",
+"extra": "I,exp,su"
+},
+{
+"value": 94,
+"text": "loop",
+"extra": "loop,exp,su"
+},
+{
+"value": 95,
+"text": "cError",
+"extra": "error,exp,su"
+},
+{
+"value": 96,
+"text": "tol",
+"extra": "VR,exp,su"
+},
+{
+"value": 98,
+"text": "mcPConnect",
+"extra": "I,exp,ro"
+},
+{
+"value": 99,
+"text": "scPConnect",
+"extra": "I,exp,ro"
+},
+{
+"value": 100,
+"text": "mError",
+"extra": "txtid,exp,ro"
+},
+{
+"value": 101,
+"text": "sError",
+"extra": "txtid,exp,ro"
+},
+{
+"value": 102,
+"text": "sRangeMax",
+"extra": "VR@,exp,ro,unr"
+},
+{
+"value": 103,
+"text": "sRangeMin",
+"extra": "VR@,exp,ro,unr"
+},
+{
+"value": 104,
+"text": "mPrimary",
+"extra": "VR@,exp,ro"
+},
+{
+"value": 105,
+"text": "mSecondary",
+"extra": "VR@,exp,ro"
+},
+{
+"value": 106,
+"text": "mTertiary",
+"extra": "VR@,exp,ro"
+},
+{
+"value": 107,
+"text": "sPrimary",
+"extra": "VR@,exp,ro"
+},
+{
+"value": 108,
+"text": "sSecondary",
+"extra": "VR@,exp,ro"
+},
+{
+"value": 109,
+"text": "sTertiary",
+"extra": "VR@,exp,ro"
+},
+{
+"value": 110,
+"text": "sSetPoint",
+"extra": "VR@,exp,ro"
+},
+{
+"value": 111,
+"text": "sbIncr",
+"extra": "VR@,exp,ro"
+},
+{
+"value": 112,
+"text": "mMax",
+"extra": "VR@,exp,ro"
+},
+{
+"value": 113,
+"text": "mMin",
+"extra": "VR@,exp,ro"
+},
+{
+"value": 114,
+"text": "refTemp",
+"extra": "VR@,exp,ro"
+},
+{
+"value": 115,
+"text": "mBar",
+"extra": "VR@,exp,ro"
+},
+{
+"value": 116,
+"text": "sIncr",
+"extra": "VR@,exp,su"
+},
+{
+"value": 117,
+"text": "muUutFS",
+"extra": "VR"
+},
+{
+"value": 118,
+"text": "muUutZero",
+"extra": "VR"
+},
+{
+"value": 119,
+"text": "suUutFS",
+"extra": "VR"
+},
+{
+"value": 120,
+"text": "suUutZero",
+"extra": "VR"
+},
+{
+"value": 123,
+"text": "sDrywellModel",
+"extra": "ST[32],exp,ro"
+},
+{
+"value": 124,
+"text": "hartJack",
+"extra": "hartjack,exp,su"
+}
+],
+"sbucket/rmp": [
+{
+"value": 5,
+"text": "ramp",
+"extra": "ramp,exp"
+},
+{
+"value": 6,
+"text": "rampTrip",
+"extra": "mode,exp"
+},
+{
+"value": 7,
+"text": "rampStep",
+"extra": "I,exp"
+},
+{
+"value": 8,
+"text": "rampPoints",
+"extra": "I,exp"
+},
+{
+"value": 11,
+"text": "rampStart",
+"extra": "VR,exp"
+},
+{
+"value": 12,
+"text": "rampEnd",
+"extra": "VR,exp"
+},
+{
+"value": 13,
+"text": "rampTripPoint",
+"extra": "VR,exp"
+},
+{
+"value": 14,
+"text": "brampStart",
+"extra": "VR"
+},
+{
+"value": 15,
+"text": "brampEnd",
+"extra": "VR"
+},
+{
+"value": 16,
+"text": "rampError",
+"extra": "I,exp"
+},
+{
+"value": 17,
+"text": "rampTime",
+"extra": "I,exp"
+}
+],
+"sbucket/swt": [
+{
+"value": 2,
+"text": "swtNumLimits",
+"extra": "I,exp,su"
+},
+{
+"value": 3,
+"text": "swtMinDeadband",
+"extra": "VR,exp,su"
+},
+{
+"value": 4,
+"text": "swtMaxDeadband",
+"extra": "VR,exp,su"
+},
+{
+"value": 5,
+"text": "swtTolerance",
+"extra": "VR,exp,su"
+},
+{
+"value": 6,
+"text": "swtSetpoint1",
+"extra": "VR,exp,su"
+},
+{
+"value": 7,
+"text": "swtIsHigh1",
+"extra": "I,exp,su"
+},
+{
+"value": 8,
+"text": "swtIsNC1",
+"extra": "I,exp,su"
+},
+{
+"value": 9,
+"text": "swtSetpoint2",
+"extra": "VR,exp,su"
+},
+{
+"value": 10,
+"text": "swtIsHigh2",
+"extra": "I,exp,su"
+},
+{
+"value": 11,
+"text": "swtIsNC2",
+"extra": "I,exp,su"
+},
+{
+"value": 12,
+"text": "swtTrip1",
+"extra": "VR,exp"
+},
+{
+"value": 13,
+"text": "swtReset1",
+"extra": "VR,exp"
+},
+{
+"value": 14,
+"text": "swtDeadband1",
+"extra": "VR,exp"
+},
+{
+"value": 15,
+"text": "swtTripError1",
+"extra": "VR,exp"
+},
+{
+"value": 16,
+"text": "swtDeadbandError1",
+"extra": "VR,exp"
+},
+{
+"value": 17,
+"text": "swtTrip2",
+"extra": "VR,exp"
+},
+{
+"value": 18,
+"text": "swtReset2",
+"extra": "VR,exp"
+},
+{
+"value": 19,
+"text": "swtDeadband2",
+"extra": "VR,exp"
+},
+{
+"value": 20,
+"text": "swtTripError2",
+"extra": "VR,exp"
+},
+{
+"value": 21,
+"text": "swtDeadbandError2",
+"extra": "VR,exp"
+},
+{
+"value": 22,
+"text": "swtCoarseStepSize",
+"extra": "V,exp,unr"
+},
+{
+"value": 23,
+"text": "swtVernierStepSize",
+"extra": "V,exp,unr"
+},
+{
+"value": 24,
+"text": "swtLimitNum",
+"extra": "I,exp,unr"
+},
+{
+"value": 25,
+"text": "swtDaemonMode",
+"extra": "I,exp,unr"
+},
+{
+"value": 26,
+"text": "swtAutoTestMode",
+"extra": "I,exp,unr"
+},
+{
+"value": 27,
+"text": "swtTestModePrimary",
+"extra": "I,exp,unr"
+},
+{
+"value": 28,
+"text": "swtTestModeSecondary",
+"extra": "I,exp,unr"
+},
+{
+"value": 29,
+"text": "swtError",
+"extra": "txtid,exp,unr"
+},
+{
+"value": 30,
+"text": "swtDaemonSync",
+"extra": "I,exp,unr"
+},
+{
+"value": 31,
+"text": "swtTripLowThreshold",
+"extra": "V,exp,unr"
+},
+{
+"value": 32,
+"text": "swtTripHighThreshold",
+"extra": "V,exp,unr"
+},
+{
+"value": 33,
+"text": "swtTripThresholdIsInnie",
+"extra": "I,exp,unr"
+},
+{
+"value": 34,
+"text": "swtTripRawMeas",
+"extra": "V,exp,unr"
+},
+{
+"value": 35,
+"text": "swtTripHysteresis",
+"extra": "V,exp,unr"
+},
+{
+"value": 36,
+"text": "swtTripDetectDelay",
+"extra": "I,exp,unr"
+},
+{
+"value": 37,
+"text": "swtSurviveTestAborts",
+"extra": "I,exp,unr"
+},
+{
+"value": 38,
+"text": "swtResultAtomAlias",
+"extra": "txtid,exp,unr"
+},
+{
+"value": 39,
+"text": "swtFloorSrcValue1",
+"extra": "VR,exp,unr"
+},
+{
+"value": 40,
+"text": "swtCeilingSrcValue1",
+"extra": "VR,exp,unr"
+},
+{
+"value": 41,
+"text": "swtFloorSrcValue2",
+"extra": "VR,exp,unr"
+},
+{
+"value": 42,
+"text": "swtCeilingSrcValue2",
+"extra": "VR,exp,unr"
+},
+{
+"value": 43,
+"text": "swtIsHigh1Str",
+"extra": "txtid,exp,unr"
+},
+{
+"value": 44,
+"text": "swtIsHigh2Str",
+"extra": "txtid,exp,unr"
+},
+{
+"value": 45,
+"text": "swtIsNC1Str",
+"extra": "txtid,exp,unr"
+},
+{
+"value": 46,
+"text": "swtIsNC2Str",
+"extra": "txtid,exp,unr"
+},
+{
+"value": 47,
+"text": "swtbSetpoint1",
+"extra": "VR,exp,unr"
+},
+{
+"value": 48,
+"text": "swtbSetpoint2",
+"extra": "VR,exp,unr"
+},
+{
+"value": 49,
+"text": "swtbMinDeadband",
+"extra": "VR,exp,unr"
+},
+{
+"value": 50,
+"text": "swtbMaxDeadband",
+"extra": "VR,exp,unr"
+},
+{
+"value": 51,
+"text": "swtbTolerance",
+"extra": "VR,exp,unr"
+},
+{
+"value": 52,
+"text": "swtMeasSetReset",
+"extra": "VR,exp,unr"
+},
+{
+"value": 53,
+"text": "swtRootOldPrimary",
+"extra": "VR,exp,unr"
+}
+],
+"scale": [
+{
+"value": 0,
+"text": "None",
+"extra": null
+},
+{
+"value": 1,
+"text": "Percent",
+"extra": null
+},
+{
+"value": 2,
+"text": "Sqrt",
+"extra": null
+},
+{
+"value": 3,
+"text": "Linear",
+"extra": null
+}
+],
+"tc": [
+{
+"value": 0,
+"text": "None",
+"extra": null
+},
+{
+"value": 1,
+"text": "E",
+"extra": null
+},
+{
+"value": 2,
+"text": "N",
+"extra": null
+},
+{
+"value": 3,
+"text": "J",
+"extra": null
+},
+{
+"value": 4,
+"text": "K",
+"extra": null
+},
+{
+"value": 5,
+"text": "T",
+"extra": null
+},
+{
+"value": 6,
+"text": "B",
+"extra": null
+},
+{
+"value": 7,
+"text": "R",
+"extra": null
+},
+{
+"value": 8,
+"text": "S",
+"extra": null
+},
+{
+"value": 9,
+"text": "C",
+"extra": null
+},
+{
+"value": 10,
+"text": "L",
+"extra": null
+},
+{
+"value": 11,
+"text": "U",
+"extra": null
+},
+{
+"value": 12,
+"text": "BP",
+"extra": null
+},
+{
+"value": 13,
+"text": "XK",
+"extra": null
+}
+],
+"tempstd": [
+{
+"value": 0,
+"text": "ITS-90",
+"extra": null
+},
+{
+"value": 1,
+"text": "IPTS-68",
+"extra": null
+}
+],
+"tref": [
+{
+"value": 0,
+"text": "Internal",
+"extra": null
+},
+{
+"value": 1,
+"text": "External",
+"extra": null
+}
+],
+"unit": [
+{
+"value": 0,
+"text": "None",
+"extra": null
+},
+{
+"value": 1,
+"text": "String",
+"extra": null
+},
+{
+"value": 2,
+"text": "Volts",
+"extra": null
+},
+{
+"value": 3,
+"text": "Volts DC",
+"extra": null
+},
+{
+"value": 4,
+"text": "Volts AC",
+"extra": null
+},
+{
+"value": 5,
+"text": "Amps",
+"extra": null
+},
+{
+"value": 6,
+"text": "Amps DC",
+"extra": null
+},
+{
+"value": 7,
+"text": "Amps AC",
+"extra": null
+},
+{
+"value": 8,
+"text": "Ohms",
+"extra": null
+},
+{
+"value": 9,
+"text": "Hertz",
+"extra": null
+},
+{
+"value": 10,
+"text": "Hertz Square",
+"extra": null
+},
+{
+"value": 11,
+"text": "Hertz Sine",
+"extra": null
+},
+{
+"value": 12,
+"text": "Seconds",
+"extra": null
+},
+{
+"value": 13,
+"text": "Celsius",
+"extra": null
+},
+{
+"value": 14,
+"text": "Fahrenheit",
+"extra": null
+},
+{
+"value": 15,
+"text": "Percent",
+"extra": null
+},
+{
+"value": 16,
+"text": "psi",
+"extra": null
+},
+{
+"value": 17,
+"text": "mHg",
+"extra": null
+},
+{
+"value": 18,
+"text": "inHg",
+"extra": null
+},
+{
+"value": 19,
+"text": "inH2O",
+"extra": null
+},
+{
+"value": 20,
+"text": "ftH2O",
+"extra": null
+},
+{
+"value": 21,
+"text": "mH2O",
+"extra": null
+},
+{
+"value": 22,
+"text": "bar",
+"extra": null
+},
+{
+"value": 23,
+"text": "Pa",
+"extra": null
+},
+{
+"value": 24,
+"text": "g/cm2",
+"extra": null
+},
+{
+"value": 25,
+"text": "inH2O 60F",
+"extra": null
+},
+{
+"value": 26,
+"text": "Rankine",
+"extra": null
+},
+{
+"value": 27,
+"text": "Kelvin",
+"extra": null
+},
+{
+"value": 28,
+"text": "inH2O 20C",
+"extra": null
+},
+{
+"value": 29,
+"text": "ftH2O 20C",
+"extra": null
+},
+{
+"value": 30,
+"text": "mH2O 20C",
+"extra": null
+}
+],
+"unitPres": [
+{
+"value": 16,
+"text": "psi",
+"extra": null
+},
+{
+"value": 17,
+"text": "mHg",
+"extra": null
+},
+{
+"value": 18,
+"text": "inHg",
+"extra": null
+},
+{
+"value": 19,
+"text": "inH2O",
+"extra": null
+},
+{
+"value": 20,
+"text": "ftH2O",
+"extra": null
+},
+{
+"value": 21,
+"text": "mH2O",
+"extra": null
+},
+{
+"value": 22,
+"text": "bar",
+"extra": null
+},
+{
+"value": 23,
+"text": "Pa",
+"extra": null
+},
+{
+"value": 24,
+"text": "g/cm2",
+"extra": null
+},
+{
+"value": 25,
+"text": "inH2O 60F",
+"extra": null
+},
+{
+"value": 28,
+"text": "inH2O 20C",
+"extra": null
+},
+{
+"value": 29,
+"text": "ftH2O 20C",
+"extra": null
+},
+{
+"value": 30,
+"text": "mH2O 20C",
+"extra": null
+}
+],
+"unitTemp": [
+{
+"value": 13,
+"text": "Celsius",
+"extra": null
+},
+{
+"value": 14,
+"text": "Fahrenheit",
+"extra": null
+},
+{
+"value": 26,
+"text": "Rankine",
+"extra": null
+},
+{
+"value": 27,
+"text": "Kelvin",
+"extra": null
+}
+]
+},
+"lists": {
+"p": [
+{
+"index": 0,
+"natoms": 9,
+"vendor": 1,
+"type": 3,
+"version": 0,
+"f5": 384,
+"time": {
+"year": 4010,
+"month": 5,
+"day": 30,
+"dow": 0,
+"hour": 17,
+"minute": 43,
+"second": 53
+},
+"alias": 1502,
+"sysflags": 0,
+"userflags": 0,
+"name": "Strategies",
+"atoms": [
+{
+"index": 0,
+"vendor": 1,
+"type": 10,
+"version": 0,
+"size": 13,
+"alias": 1409,
+"sysflags": 0,
+"userflags": 0,
+"name": "Cal Strategy",
+"raw": {
+"hex": "3320ee828c0006000013882710"
+}
+},
+{
+"index": 1,
+"vendor": 1,
+"type": 10,
+"version": 0,
+"size": 13,
+"alias": 1409,
+"sysflags": 0,
+"userflags": 0,
+"name": "Cal Strategy",
+"raw": {
+"hex": "3320ee828d0006271013880000"
+}
+},
+{
+"index": 2,
+"vendor": 1,
+"type": 10,
+"version": 0,
+"size": 20,
+"alias": 1409,
+"sysflags": 0,
+"userflags": 0,
+"name": "Cal Strategy",
+"raw": {
+"hex": "3320ee828cee828d000a00001388271013880000"
+}
+},
+{
+"index": 3,
+"vendor": 1,
+"type": 10,
+"version": 0,
+"size": 17,
+"alias": 1409,
+"sysflags": 0,
+"userflags": 0,
+"name": "Cal Strategy",
+"raw": {
+"hex": "3520ee828c000a000009c413881d4c2710"
+}
+},
+{
+"index": 4,
+"vendor": 1,
+"type": 10,
+"version": 0,
+"size": 17,
+"alias": 1409,
+"sysflags": 0,
+"userflags": 0,
+"name": "Cal Strategy",
+"raw": {
+"hex": "3520ee828d000a27101d4c138809c40000"
+}
+},
+{
+"index": 5,
+"vendor": 1,
+"type": 10,
+"version": 0,
+"size": 28,
+"alias": 1409,
+"sysflags": 0,
+"userflags": 0,
+"name": "Cal Strategy",
+"raw": {
+"hex": "3520ee828cee828d0012000009c413881d4c27101d4c138809c40000"
+}
+},
+{
+"index": 6,
+"vendor": 1,
+"type": 10,
+"version": 0,
+"size": 30,
+"alias": 1409,
+"sysflags": 0,
+"userflags": 0,
+"name": "Cal Strategy",
+"raw": {
+"hex": "313120ee828c0016000003e807d00bb80fa0138817701b581f4023282710"
+}
+},
+{
+"index": 7,
+"vendor": 1,
+"type": 10,
+"version": 0,
+"size": 30,
+"alias": 1409,
+"sysflags": 0,
+"userflags": 0,
+"name": "Cal Strategy",
+"raw": {
+"hex": "313120ee828d0016271023281f401b58177013880fa00bb807d003e80000"
+}
+},
+{
+"index": 8,
+"vendor": 1,
+"type": 10,
+"version": 0,
+"size": 53,
+"alias": 1409,
+"sysflags": 0,
+"userflags": 0,
+"name": "Cal Strategy",
+"raw": {
+"hex": "313120ee828cee828d002a000003e807d00bb80fa0138817701b581f402328271023281f401b58177013880fa00bb807d003e80000"
+}
+}
+]
+}
+],
+"r": [
+{
+"index": 0,
+"natoms": 11,
+"vendor": 1,
+"type": 102,
+"version": 0,
+"f5": 1368,
+"time": {
+"year": 4026,
+"month": 7,
+"day": 14,
+"dow": 2,
+"hour": 15,
+"minute": 25,
+"second": 58
+},
+"alias": 1606,
+"sysflags": 0,
+"userflags": 0,
+"name": "Calibration",
+"atoms": [
+{
+"index": 0,
+"vendor": 1,
+"type": 3,
+"version": 0,
+"size": 175,
+"alias": 0,
+"sysflags": 64,
+"userflags": 0,
+"name": "Saved State",
+"raw": {
+"hex": "000100fe01ffff273701c3d6e03801c3cde03901498241b81203801004c38243c882c2c8823f80cde00001120a3a42545557595a5b5d7c01c224e0e04601c26402e049012922e00001120353565f01c244e0e05801c2640ee05c0149221203863005b0e05e01c26403e0600149823f001203803005c3222222b0e04001c6c2671c023ca3d70ae04101c6c2671d023b83126fe05001c6c267778242c8e05101c6c2677822e07401c6c267208241c8e0"
+}
+},
+{
+"index": 1,
+"vendor": 1,
+"type": 4,
+"version": 0,
+"size": 24,
+"alias": 1601,
+"sysflags": 90,
+"userflags": 0,
+"name": "Calibration",
+"raw": {
+"hex": "020000000001000000000000000027100106000200030004"
+}
+},
+{
+"index": 2,
+"vendor": 1,
+"type": 3,
+"version": 0,
+"size": 307,
+"alias": 0,
+"sysflags": 64,
+"userflags": 0,
+"name": "Saved State",
+"raw": {
+"hex": "010200020000000000ffff27741449145c145d140b0149023b83f4ed1203103006c4023cf5c28f22023851b717023d072b02c5e01901490242c8001e1203983006c48243c80242233333220243cbffdfc8e01c0149023ca3d70a120100246402641ce01d0149023b83126f120100246402641ce02101498241c8120418200502c3024448800022824000cde0000112022578014922120480200502c482444882c34a8240000244488000cde0e000011205276263646501c224e0e02c01c244e0310149023e2e147b1203802006c382447a82c47a22cfe05901c26402e07701498242c8120100246402840095e04001c6c2671c023ca3d70ae04101c6c2671d023b83126fe05001c6c267778242c8e05101c6c2677822e06801c629670be06b01c6296725e06c01c6296719e06f01c6296721e0"
+}
+},
+{
+"index": 3,
+"vendor": 1,
+"type": 3,
+"version": 0,
+"size": 91,
+"alias": 0,
+"sysflags": 64,
+"userflags": 0,
+"name": "Saved State",
+"raw": {
+"hex": "010400020000000200ffff270b0149023c45197a120100246402641ce01901490242eecb50120100246402643ce0250149824248120100246402840095e000011202272c01c244e0e0310149023e428f5c1201002464028400c8e0"
+}
+},
+{
+"index": 4,
+"vendor": 1,
+"type": 3,
+"version": 0,
+"size": 91,
+"alias": 0,
+"sysflags": 64,
+"userflags": 0,
+"name": "Saved State",
+"raw": {
+"hex": "010804020000000200ffff270b0149023ca40faa120100246402641ce019014902430a8168120100246402643ce02501498242c8120100246402840095e000011202272c01c244e0e0310149023e2e147b1201002464028400c8e0"
+}
+},
+{
+"index": 5,
+"vendor": 1,
+"type": 11,
+"version": 0,
+"size": 17,
+"alias": 1410,
+"sysflags": 64,
+"userflags": 0,
+"name": "Tag ID",
+"raw": {
+"hex": "54542d31303000534e2d30303031003100"
+}
+},
+{
+"index": 6,
+"vendor": 1,
+"type": 4,
+"version": 0,
+"size": 24,
+"alias": 1602,
+"sysflags": 90,
+"userflags": 0,
+"name": "Calibration",
+"raw": {
+"hex": "020000000001000000000000000027100006000700080009"
+}
+},
+{
+"index": 7,
+"vendor": 1,
+"type": 3,
+"version": 0,
+"size": 265,
+"alias": 0,
+"sysflags": 64,
+"userflags": 0,
+"name": "Saved State",
+"raw": {
+"hex": "010408020000000200ffff270b0149023b83126f120100246402641ce01901490242c8001e120100246402643ce02101498241c8120100246402647ae0000112022578014922120100246402840095e0e000011202273a01c224e0e0000112022c5301c244e0e0310149221201002464028400c8e03701c3d6e03801c3cde03901498241b812010024246418e000011202465901c26402e0e05801c2640ee05e01c26403e0600149823f0012010024246470e07701498242c8120100246402840095e04001c6c2671c023ca3d70ae04101c6c2671d023b83126fe05001c6c267778242c8e05101c6c2677822e06801c629670be06b01c6296725e06c01c6296719e06f01c6296721e0"
+}
+},
+{
+"index": 8,
+"vendor": 1,
+"type": 3,
+"version": 0,
+"size": 87,
+"alias": 0,
+"sysflags": 64,
+"userflags": 0,
+"name": "Saved State",
+"raw": {
+"hex": "010800020000000700ffff270b0149023c449ba6120100246402641ce01901490242eecb50120100246402643ce0250149824248120100246402840095e000011202272c01c244e0e0310149221201002464028400c8e0"
+}
+},
+{
+"index": 9,
+"vendor": 1,
+"type": 3,
+"version": 0,
+"size": 87,
+"alias": 0,
+"sysflags": 64,
+"userflags": 0,
+"name": "Saved State",
+"raw": {
+"hex": "011008020000000700ffff270b0149023ca3d70a120100246402641ce019014902430a8168120100246402643ce02501498242c8120100246402840095e000011202272c01c244e0e0310149221201002464028400c8e0"
+}
+},
+{
+"index": 10,
+"vendor": 1,
+"type": 11,
+"version": 0,
+"size": 17,
+"alias": 1410,
+"sysflags": 64,
+"userflags": 0,
+"name": "Tag ID",
+"raw": {
+"hex": "54542d31303000534e2d30303031003100"
+}
+}
+]
+}
+]
+}
+}

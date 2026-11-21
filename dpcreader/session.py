@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import dataclasses
 import datetime as _dt
-from typing import Callable, List, Optional
+import json
+from typing import Callable, List, Optional, Tuple
 
 from . import link as L, maps as M, memfmt as F
 
@@ -16,12 +17,20 @@ def open_port(port: str, baud: int, timeout: float = 2.0) -> L.Calibrator:
     return L.open_calibrator(port, baud, timeout=timeout)
 
 
+FLUKE_USB_VID = 0x0F7E        # Fluke's USB vendor id (754 shows as VID_0F7E&PID_9009)
+
+
 def list_ports() -> List[str]:
+    """COM ports, with any Fluke calibrator first and labelled as such."""
     try:
         from serial.tools import list_ports
-        return [f"{p.device} - {p.description}" for p in list_ports.comports()]
+        ports = list(list_ports.comports())
     except Exception:
         return []
+    fluke = [p for p in ports if getattr(p, "vid", None) == FLUKE_USB_VID]
+    other = [p for p in ports if p not in fluke]
+    return ([f"{p.device} - Fluke calibrator ({p.description})" for p in fluke]
+            + [f"{p.device} - {p.description}" for p in other])
 
 
 def _plain(o):
@@ -37,7 +46,36 @@ def _plain(o):
     return o
 
 
-def read_all(cal: L.Calibrator, source: str, progress: Optional[Callable[[str, float], None]] = None) -> dict:
+def _decode(a: dict, raw: bytes, maps: M.Maps) -> dict:
+    try:
+        d = F.decode_atom(a["vendor"], a["type"], raw, a["version"])
+        if d.get("kind") == "state":
+            maps.annotate(d)
+    except Exception as e:                 # keep the raw bytes; never lose an upload to a decode bug
+        d = {"kind": "undecoded", "error": f"{type(e).__name__}: {e}"}
+    return d
+
+
+def redecode(snapshot: dict) -> dict:
+    """Decode a saved snapshot again from its raw bytes, so reads saved by an older
+    version benefit from decoder fixes."""
+    try:
+        maps = M.Maps({k: [M.MapEntry(**e) for e in v] for k, v in snapshot.get("maps", {}).items()})
+    except Exception:
+        maps = M.Maps()
+    for groups in snapshot.get("lists", {}).values():
+        for g in groups:
+            t = g.get("time") or {}
+            if t.get("year", 0) > 3000:                # saved before the directory year fix
+                t["year"] -= 2000
+            for a in g.get("atoms", ()):
+                raw = (a.get("raw") or {}).get("hex")
+                if raw is not None:
+                    a["decoded"] = _plain(_decode(a, bytes.fromhex(raw), maps))
+    return snapshot
+
+
+def read_all(cal: L.Calibrator,source: str, progress: Optional[Callable[[str, float], None]] = None) -> dict:
     say = progress or (lambda msg, frac: None)
     say("Identifying calibrator", 0.0)
     ident = cal.identify()
@@ -57,13 +95,7 @@ def read_all(cal: L.Calibrator, source: str, progress: Optional[Callable[[str, f
             for a in g["atoms"]:
                 raw = cal.upload_atom(w, g["index"], a["index"])
                 a["raw"] = raw
-                try:
-                    d = F.decode_atom(a["vendor"], a["type"], raw, a["version"])
-                    if d.get("kind") == "state":
-                        maps.annotate(d)
-                except Exception as e:     # keep the raw bytes; never lose an upload to a decode bug
-                    d = {"kind": "undecoded", "error": str(e)}
-                a["decoded"] = d
+                a["decoded"] = _decode(a, raw, maps)
                 done += 1
                 say(f"Reading {LISTS[w].lower()}: {g['name']}", 0.1 + 0.9 * done / total)
     say("Done", 1.0)
@@ -130,21 +162,115 @@ def group_summary(group: dict) -> dict:
     return info
 
 
+MEMLIST_KEYS = {1: "p", 2: "r"}
+
+
+def _list_key(snapshot: dict, group: dict) -> Optional[str]:
+    for w, groups in snapshot.get("lists", {}).items():
+        if any(g is group for g in groups):
+            return w
+    return None
+
+
+def find_atom(group: dict, idx: int) -> Optional[dict]:
+    """Atom by its directory index (falls back to list position)."""
+    for a in group.get("atoms", ()):
+        if a.get("index") == idx:
+            return a
+    atoms = group.get("atoms", ())
+    return atoms[idx] if 0 <= idx < len(atoms) else None
+
+
+def resolve_addr(snapshot: dict, group: dict, addr: Optional[dict]) -> Tuple[Optional[dict], Optional[dict]]:
+    """(group, atom) an embedded atom address points at, or (None, None)."""
+    if not addr or addr.get("group", -1) < 0 or addr.get("atom", -1) < 0:
+        return None, None
+    w = MEMLIST_KEYS.get(addr.get("memlist")) or _list_key(snapshot, group)
+    for g in snapshot.get("lists", {}).get(w, ()):
+        if g.get("index") == addr["group"]:
+            return g, find_atom(g, addr["atom"])
+    return None, None
+
+
+def _has_unit(b: dict) -> bool:
+    rng = b.get("range") or {}
+    return "unit" in rng or "unit_name" in rng
+
+
+def merged_state(snapshot: dict, group: dict, state: dict) -> dict:
+    """The full state a state atom describes: its diff applied over the base chain, with
+    alias buckets (spec 'VR@') resolved to the bucket they point at."""
+    out = _merge(snapshot, group, state)
+    for lst in out.get("lists", ()):
+        by_id = {b["id"]: b for b in lst.get("buckets", ()) if not b.get("deleted")}
+        for b in lst.get("buckets", ()):
+            t = by_id.get(b.get("ref"))
+            if t is not None and t is not b and "value" in t:
+                b.update(value=t["value"], target=t.get("name"))
+                if "range" in t:
+                    b["range"] = t["range"]
+                if "text" in t:
+                    b["text"] = t["text"]
+    return out
+
+
+def _merge(snapshot: dict, group: dict, state: dict, _depth: int = 0) -> dict:
+    g, base_atom = resolve_addr(snapshot, group, state.get("base"))
+    base = (base_atom or {}).get("decoded") or {}
+    if _depth > 16 or base.get("kind") != "state" or base is state:
+        return json.loads(json.dumps(state))          # private copy; callers may modify it
+    base = _merge(snapshot, g, base, _depth + 1)
+    lists = {}
+    for lst in base.get("lists", ()):
+        lists[lst.get("list")] = dict(lst, buckets={b["id"]: b for b in lst.get("buckets", ()) if not b.get("deleted")})
+    for lst in state.get("lists", ()):
+        cur = lists.setdefault(lst.get("list"), dict(lst, buckets={}))
+        if lst.get("name"):
+            cur["name"] = lst["name"]
+        for b in lst.get("buckets", ()):
+            if b.get("deleted"):
+                cur["buckets"].pop(b["id"], None)
+            else:
+                old = cur["buckets"].get(b["id"], {})
+                new = {**{k: old[k] for k in ("name", "spec") if k in old}, **b}
+                if _has_unit(old) and not _has_unit(new):  # range given as a back-reference: keep the unit
+                    new["range"] = old["range"]
+                cur["buckets"][b["id"]] = new
+    out = dict(state)
+    out["lists"] = [dict(l, buckets=list(l["buckets"].values())) for l in lists.values()]
+    return out
+
+
 def readings(snapshot: dict, group: dict) -> dict:
     """Table of test-point readings for one group: {'columns': [...], 'rows': [[...]]}.
-    One row per step of each result set (strategy summary)."""
+    One row per step of each result set (strategy summary). A 'Note' column explains
+    any point whose result record could not be turned into values."""
     atoms = group["atoms"]
     sets = [a for a in atoms if (a.get("decoded") or {}).get("kind") == "strategy_summary"]
-    cols, rows = [], []
+    cols, rows, any_note = [], [], False
     for si, s in enumerate(sets, 1):
         for step, idx in enumerate(s["decoded"].get("results", []), 1):
-            vals = {}
-            if 0 <= idx < len(atoms) and (atoms[idx].get("decoded") or {}).get("kind") == "state":
-                for v in state_values(snapshot, atoms[idx]["decoded"]):
+            vals, note = {}, ""
+            a = find_atom(group, idx)
+            d = (a or {}).get("decoded") or {}
+            if a is None:
+                note = f"result record {idx} not found"
+            elif d.get("kind") != "state":
+                note = f"record {idx} is '{d.get('kind', '?')}', not a state" + (
+                    f" ({d['error']})" if d.get("error") else "")
+            else:
+                for v in state_values(snapshot, merged_state(snapshot, group, d)):
                     vals[v["name"]] = (_fmt(v["value"]) + (" " + v["unit"] if v["unit"] else "")).strip()
+                if d.get("error"):
+                    note = f"record {idx} only partly decoded ({d['error']})"
+                elif not vals:
+                    note = f"record {idx} holds no values"
+            any_note = any_note or bool(note)
             for k in vals:
                 if k not in cols:
                     cols.append(k)
-            rows.append((si, step, vals))
-    return {"columns": ["Result set", "Point"] + cols,
-            "rows": [[si, step] + [vals.get(c, "") for c in cols] for si, step, vals in rows]}
+            rows.append((si, step, vals, note))
+    extra = ["Note"] if any_note else []
+    return {"columns": ["Result set", "Point"] + cols + extra,
+            "rows": [[si, step] + [vals.get(c, "") for c in cols] + ([note] if any_note else [])
+                     for si, step, vals, note in rows]}

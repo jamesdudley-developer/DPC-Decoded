@@ -5,3 +5,9 @@ dist/
 __pycache__/
 *.spec
 *.db
+
+# local outputs with real calibration data - never publish
+calibration-results-*.csv
+sample-certificate-*.pdf
+*.pdf
+!docs/**/*.pdf

@@ -240,10 +240,12 @@ def decode_range(vals: List[Value]) -> dict:
     return out
 
 
-def read_bucket_stream(r) -> List[dict]:
+def read_bucket_stream(r, lists: Optional[List[dict]] = None) -> List[dict]:
     """State buckets: QUARK(0x7fff, list id) starts a bucket list; every other quark is a
-    bucket whose compound value is [kind, field, field, ...] (0x100278ac, 0x1002a448)."""
-    lists, cur = [], None
+    bucket whose compound value is [kind, field, field, ...] (0x100278ac, 0x1002a448).
+    Pass `lists` to keep what was decoded so far if the stream fails part-way."""
+    lists = [] if lists is None else lists
+    cur = None
     while not r.eof():
         qid, v = read_quark(r)
         if v is END:
@@ -255,23 +257,47 @@ def read_bucket_stream(r) -> List[dict]:
         if cur is None:
             cur = {"list": None, "buckets": []}
             lists.append(cur)
-        if v.type == T_COMPOUND and v.value:
-            kind = v.value[0].value
-            b = {"id": qid, "kind": BUCKET_KINDS.get(kind, kind),
-                 "fields": [x.plain() for x in v.value[1:]]}
-            if kind == 1 and len(v.value) > 2:
-                b["value"] = v.value[1].value
-                b["range"] = decode_range(v.value[2:])
-            cur["buckets"].append(b)
+        if (v.type == T_COMPOUND and len(v.value) == 2 and isinstance(v.value[0].value, list)
+                and v.value[1].type == T_COMPOUND):
+            # shared value [[id, id, ...], [kind, fields...]]: every listed bucket gets the same value
+            for bid in v.value[0].value:
+                cur["buckets"].append(_make_bucket(bid, v.value[1].value))
+        elif v.type == T_COMPOUND and v.value:
+            cur["buckets"].append(_make_bucket(qid, v.value))
         else:                             # antiquark: bucket deleted relative to the base state
             cur["buckets"].append({"id": qid, "deleted": True})
     return lists
 
 
+def _make_bucket(qid: int, items: List[Value]) -> dict:
+    kind = items[0].value
+    b = {"id": qid, "kind": BUCKET_KINDS.get(kind, kind) if isinstance(kind, int) else kind,
+         "fields": [x.plain() for x in items[1:]]}
+    if kind == 1 and len(items) > 1:
+        b["value"] = items[1].value
+        if len(items) > 2:
+            try:                          # range layout is only partly known; never lose the value over it
+                b["range"] = decode_range(items[2:])
+            except Exception as e:
+                b["range"] = {"error": f"{type(e).__name__}: {e}"}
+    elif kind == 0 and len(items) > 1:
+        b["value"] = items[1].value
+    elif kind == 6 and len(items) > 2:    # alias of another bucket (spec "VR@"): [6, mode, target, (cached value)]
+        b["ref"] = items[2].value
+        if len(items) > 3:
+            b["value"] = items[3].value
+    return b
+
+
 def _state_bucket(r):                   # type 3  STATE_BUCKET_ATOM 0x1002aa31
     out = {"version": r.u8(), "colormap": r.u8(), "redefines": r.u8(),
            "base": read_atom_full(r), "flags": r.u8()}
-    out["lists"] = read_bucket_stream(r)
+    out["lists"] = []
+    try:
+        read_bucket_stream(r, out["lists"])
+    except Exception as e:              # keep the buckets read before the failure
+        out["error"] = f"{type(e).__name__}: {e}"
+        out["trailing"] = r.rest()
     return out
 
 
@@ -407,7 +433,7 @@ def parse_group_record(rec: str) -> dict:   # 16 fields + "name"  (0x10003d84)
     n, name = _split(rec)
     return {"index": n[0], "natoms": n[1], "vendor": n[2], "type": n[3], "version": n[4],
             "f5": n[5],
-            "time": {"year": 2000 + n[6], "month": n[7], "day": n[8], "dow": n[9],
+            "time": {"year": n[6] if n[6] >= 100 else 2000 + n[6],   # real 754 sends the full year"month": n[7], "day": n[8], "dow": n[9],
                      "hour": n[10], "minute": n[11], "second": n[12]},
             "alias": n[13], "sysflags": n[14], "userflags": n[15], "name": name}
 
